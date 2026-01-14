@@ -3,40 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Content Advisor</title>
+    <title>CineGuard | Content Advisor</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0f172a; }
+        .hero-font { font-family: 'Bebas Neue', cursive; letter-spacing: 2px; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .movie-card:hover { transform: translateY(-5px); border-color: #3b82f6; }
+        .spinner { border-top-color: #3b82f6; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
-<body class="bg-gray-900 text-white p-10">
-    <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6">🎬 Movie Content Advisor</h1>
-        
-        <div class="flex gap-2 mb-4">
-            <input id="query" type="text" placeholder="Enter Movie Name..." 
-                   class="flex-1 p-3 rounded bg-gray-800 border border-gray-700 focus:border-blue-500 outline-none">
-            <button onclick="searchMovies()" class="bg-blue-600 px-6 py-2 rounded font-bold hover:bg-blue-700 transition">Search</button>
+<body class="text-slate-200 min-h-screen pb-20">
+
+    <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 pt-12">
+        <header class="text-center mb-12">
+            <h1 class="hero-font text-7xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-600 mb-2">CINEGUARD</h1>
+            <p class="text-slate-400 text-lg">Professional Content Sensitivity Analysis</p>
+        </header>
+
+        <div class="glass p-2 rounded-2xl flex items-center mb-8 shadow-2xl">
+            <input id="query" type="text" placeholder="Search for a movie (e.g. Deadpool, Inception)..." 
+                   class="bg-transparent w-full p-4 outline-none text-lg placeholder-slate-500">
+            <button onclick="searchMovies()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg">
+                SEARCH
+            </button>
         </div>
 
-        <div class="mb-6">
-            <label class="block mb-2 font-semibold">Select Category:</label>
-            <div class="flex gap-4">
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" name="category" value="violence" checked class="w-4 h-4 text-blue-600"> 
-                    Violence & Gore
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" name="category" value="nudity" class="w-4 h-4 text-blue-600"> 
-                    Sex & Nudity
-                </label>
+        <div class="flex flex-wrap justify-center gap-6 mb-10">
+            <label class="flex items-center gap-3 cursor-pointer group">
+                <input type="radio" name="category" value="violence" checked class="hidden peer">
+                <div class="px-6 py-2 rounded-full border border-slate-700 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-all text-sm font-bold uppercase tracking-widest">
+                    ⚔️ Violence & Gore
+                </div>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+                <input type="radio" name="category" value="nudity" class="hidden peer">
+                <div class="px-6 py-2 rounded-full border border-slate-700 peer-checked:bg-pink-600 peer-checked:border-pink-600 transition-all text-sm font-bold uppercase tracking-widest">
+                    🔞 Sex & Nudity
+                </div>
+            </label>
+        </div>
+
+        <div id="results" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
+
+        <div id="loading" class="hidden flex flex-col items-center py-10">
+            <div class="w-12 h-12 border-4 border-slate-700 rounded-full spinner mb-4"></div>
+            <p class="text-blue-400 animate-pulse font-bold tracking-widest uppercase text-sm">Analyzing Film Frames...</p>
+        </div>
+
+        <div id="report" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div class="glass rounded-3xl overflow-hidden shadow-2xl">
+                <div id="severityBar" class="h-3 w-full bg-slate-700">
+                    <div id="severityProgress" class="h-full transition-all duration-1000" style="width: 0%"></div>
+                </div>
+                <div class="p-8">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h2 id="movieTitle" class="text-4xl font-black text-white mb-1"></h2>
+                            <p id="reportCategory" class="text-blue-400 font-bold uppercase text-xs tracking-tighter"></p>
+                        </div>
+                        <div id="severityBadge" class="px-4 py-1 rounded-md text-xs font-black uppercase tracking-tighter border shadow-sm"></div>
+                    </div>
+                    
+                    <div id="detailsList" class="space-y-4"></div>
+                </div>
             </div>
-        </div>
-
-        <div id="results" class="mt-6 space-y-2"></div>
-        
-        <div id="report" class="mt-10 p-6 bg-gray-800 rounded-lg border border-gray-700 hidden">
-            <h2 id="movieTitle" class="text-2xl font-bold mb-1"></h2>
-            <p id="reportCategory" class="text-sm text-gray-400 uppercase tracking-widest mb-2"></p>
-            <p id="severity" class="text-xl font-black mb-6"></p>
-            <ul id="detailsList" class="space-y-4"></ul>
         </div>
     </div>
 
@@ -45,53 +83,91 @@
             const query = document.getElementById('query').value;
             if(!query) return;
             
-            document.getElementById('results').innerHTML = "Searching...";
-            const res = await fetch('/search', {
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({query})
-            });
-            const data = await res.json();
+            const resultsDiv = document.getElementById('results');
+            const reportDiv = document.getElementById('report');
+            reportDiv.classList.add('hidden');
+            resultsDiv.innerHTML = '<div class="col-span-full text-center py-10 text-slate-500">Searching film database...</div>';
             
-            let html = '<h3 class="text-xl mb-3 font-semibold text-blue-400">Search Results:</h3>';
-            data.slice(0,5).forEach(m => {
-                html += `<button onclick="analyze('${m.id}', '${m.display.replace(/'/g, "\\'")}')" 
-                         class="block w-full text-left p-3 bg-gray-700 rounded hover:bg-gray-600 transition mb-2">
-                         ${m.display}</button>`;
-            });
-            document.getElementById('results').innerHTML = html;
+            try {
+                const res = await fetch('/search', {
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({query})
+                });
+                const data = await res.json();
+                
+                resultsDiv.innerHTML = data.slice(0,6).map(m => `
+                    <div onclick="analyze('${m.id}', '${m.display.replace(/'/g, "\\'")}')" 
+                         class="glass p-4 rounded-xl cursor-pointer movie-card transition-all flex justify-between items-center group">
+                        <span class="font-bold text-slate-300 group-hover:text-white transition">${m.display}</span>
+                        <span class="text-blue-500 opacity-0 group-hover:opacity-100 transition">ANALYZE →</span>
+                    </div>
+                `).join('');
+            } catch (e) {
+                resultsDiv.innerHTML = '<div class="text-red-500">Search failed. Check connection.</div>';
+            }
         }
 
         async function analyze(id, title) {
-            // Get selected category from radio buttons
             const category = document.querySelector('input[name="category"]:checked').value;
-            
-            document.getElementById('results').innerHTML = `<div class="p-4 bg-blue-900/30 border border-blue-500 rounded text-blue-300">
-                Generating heavy robust report for <b>${category}</b>...</div>`;
-            
-            const res = await fetch('/analyze', {
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({id, category})
-            });
-            const data = await res.json();
-            
-            document.getElementById('results').innerHTML = "";
-            document.getElementById('report').classList.remove('hidden');
-            document.getElementById('movieTitle').innerText = title;
-            document.getElementById('reportCategory').innerText = category.replace('_', ' ');
-            
-            const sev = data.severity.toUpperCase();
-            document.getElementById('severity').innerText = "SEVERITY: " + sev;
-            
-            // Color code the severity
-            const sevEl = document.getElementById('severity');
-            sevEl.className = "text-xl font-black mb-6 " + 
-                (sev === 'SEVERE' ? 'text-red-500' : sev === 'MODERATE' ? 'text-yellow-500' : 'text-green-500');
+            const loading = document.getElementById('loading');
+            const report = document.getElementById('report');
+            const results = document.getElementById('results');
 
-            document.getElementById('detailsList').innerHTML = data.details.map(d => 
-                `<li class="border-l-4 border-gray-600 pl-4 py-2 bg-gray-900/50 rounded-r">${d}</li>`
-            ).join('');
+            results.classList.add('opacity-30', 'pointer-events-none');
+            loading.classList.remove('hidden');
+            report.classList.add('hidden');
+
+            try {
+                const res = await fetch('/analyze', {
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({id, category})
+                });
+                const data = await res.json();
+                
+                loading.classList.add('hidden');
+                results.classList.remove('opacity-30', 'pointer-events-none');
+                report.classList.remove('hidden');
+                
+                document.getElementById('movieTitle').innerText = title;
+                document.getElementById('reportCategory').innerText = category.replace('violence', 'Violence & Gore Analysis').replace('nudity', 'Sex & Nudity Analysis');
+                
+                const sev = data.severity.toLowerCase();
+                const badge = document.getElementById('severityBadge');
+                const progress = document.getElementById('severityProgress');
+                
+                let colorClass = 'bg-emerald-500/20 text-emerald-500 border-emerald-500/50';
+                let barColor = 'bg-emerald-500';
+                let width = '33%';
+
+                if(sev === 'severe') {
+                    colorClass = 'bg-rose-500/20 text-rose-500 border-rose-500/50';
+                    barColor = 'bg-rose-500';
+                    width = '100%';
+                } else if(sev === 'moderate') {
+                    colorClass = 'bg-amber-500/20 text-amber-500 border-amber-500/50';
+                    barColor = 'bg-amber-500';
+                    width = '66%';
+                }
+
+                badge.className = `px-4 py-1 rounded-md text-xs font-black uppercase tracking-widest border shadow-sm ${colorClass}`;
+                badge.innerText = sev;
+                progress.className = `h-full transition-all duration-1000 ${barColor}`;
+                setTimeout(() => progress.style.width = width, 100);
+
+                document.getElementById('detailsList').innerHTML = data.details.map(d => `
+                    <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-800 text-slate-400 text-sm leading-relaxed">
+                        ${d}
+                    </div>
+                `).join('');
+                
+                window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
+                
+            } catch (e) {
+                loading.classList.add('hidden');
+                alert("Analysis failed. Please try again.");
+            }
         }
     </script>
 </body>
