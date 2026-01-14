@@ -3,91 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Fighters | Content Advisor</title>
+    <title>Real Fighters | Professional Content Advisory</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0f172a; }
-        .hero-font { font-family: 'Bebas Neue', cursive; letter-spacing: 2px; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .movie-card:hover { transform: translateY(-5px); border-color: #3b82f6; }
-        .spinner { border-top-color: #3b82f6; animation: spin 1s linear infinite; }
+        body { 
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #FBBF24;
+            overflow-x: hidden;
+        }
+        
+        /* Gotham-like font with Gold-Black Gradient */
+        .hero-font { 
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            letter-spacing: -2px;
+            background: linear-gradient(to bottom, #FBBF24 0%, #B45309 50%, #000000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.3)); */
+        }
+        
+        /* Background Decorative Elements */
+        .bg-element {
+            position: fixed;
+            border: 1px solid rgba(251, 191, 36, 0.1);
+            z-index: -1;
+            rotate: 45deg;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(45deg); }
+            50% { transform: translateY(-100px) rotate(90deg); }
+            100% { transform: translateY(0) rotate(45deg); }
+        }
+
+        .content-card { 
+            background: rgba(251, 191, 36, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .movie-card:hover { 
+            transform: translateY(-4px);
+            border-color: #FBBF24;
+            background: rgba(251, 191, 36, 0.08);
+        }
+        
+        .spinner { border-top-color: #FBBF24; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen pb-20">
+<body class="min-h-screen">
 
-    <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[120px]"></div>
-    </div>
+    <div class="bg-element w-96 h-96 top-[-10%] left-[-10%]" style="animation-delay: 0s;"></div>
+    <div class="bg-element w-[500px] h-[500px] bottom-[-10%] right-[-10%]" style="animation-delay: -5s;"></div>
+    <div class="fixed top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-yellow-900/10 via-black to-black -z-20"></div>
 
-    <div class="max-w-4xl mx-auto px-6 pt-12">
-        <header class="text-center mb-12">
-            <h1 class="hero-font text-7xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-600 mb-2">REAL FIGHTERS</h1>
-            <p class="text-slate-400 text-lg">Professional Content Sensitivity Analysis</p>
+    <div class="max-w-6xl mx-auto px-6 py-16">
+        
+        <header class="text-center mb-20 fade-in-up">
+            <h1 class="hero-font text-8xl md:text-[12rem] leading-none mb-4 uppercase">Real Fighters</h1>
+            <p class="text-yellow-400/50 text-sm font-bold tracking-[0.5em] uppercase max-w-2xl mx-auto">Content Advisory System</p>
         </header>
 
-        <div class="glass p-2 rounded-2xl flex items-center mb-8 shadow-2xl">
-            <input id="query" type="text" placeholder="Search for a movie (e.g. Deadpool, Inception)..." 
-                   class="bg-transparent w-full p-4 outline-none text-lg placeholder-slate-500">
-            <button onclick="searchMovies()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg">
-                SEARCH
-            </button>
+        <div class="max-w-3xl mx-auto mb-16 fade-in-up" style="animation-delay: 0.1s;">
+            <div class="content-card p-2 rounded-2xl">
+                <div class="flex items-center gap-2">
+                    <input id="query" type="text" placeholder="SEARCH FILMS..." 
+                           class="bg-transparent w-full px-6 py-5 text-yellow-400 text-lg placeholder-yellow-400/20 rounded-xl outline-none">
+                    <button onclick="searchMovies()" class="bg-yellow-500 hover:bg-yellow-400 text-black font-black py-5 px-10 rounded-xl uppercase tracking-widest text-sm transition-all shadow-lg shadow-yellow-500/20">
+                        FIND
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="flex flex-wrap justify-center gap-6 mb-10">
-            <label class="flex items-center gap-3 cursor-pointer group">
+        <div class="flex flex-wrap justify-center gap-6 mb-16 fade-in-up" style="animation-delay: 0.2s;">
+            <label class="cursor-pointer group">
                 <input type="radio" name="category" value="violence" checked class="hidden peer">
-                <div class="px-6 py-2 rounded-full border border-slate-700 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-all text-sm font-bold uppercase tracking-widest">
-                    ⚔️ Violence & Gore
+                <div class="px-8 py-3 rounded-none border-b-2 border-transparent peer-checked:border-yellow-500 transition-all opacity-40 peer-checked:opacity-100">
+                    <span class="text-yellow-400 font-black uppercase tracking-widest text-xs">01. Violence & Gore</span>
                 </div>
             </label>
-            <label class="flex items-center gap-3 cursor-pointer group">
+            <label class="cursor-pointer group">
                 <input type="radio" name="category" value="nudity" class="hidden peer">
-                <div class="px-6 py-2 rounded-full border border-slate-700 peer-checked:bg-pink-600 peer-checked:border-pink-600 transition-all text-sm font-bold uppercase tracking-widest">
-                    🔞 Sex & Nudity
+                <div class="px-8 py-3 rounded-none border-b-2 border-transparent peer-checked:border-yellow-500 transition-all opacity-40 peer-checked:opacity-100">
+                    <span class="text-yellow-400 font-black uppercase tracking-widest text-xs">02. Sex & Nudity</span>
                 </div>
             </label>
         </div>
 
-        <div id="results" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
+        <div id="results" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-20"></div>
 
-        <div id="loading" class="hidden flex flex-col items-center py-10">
-            <div class="w-12 h-12 border-4 border-slate-700 rounded-full spinner mb-4"></div>
-            <p class="text-blue-400 animate-pulse font-bold tracking-widest uppercase text-sm">Analyzing Film Frames...</p>
+        <div id="loading" class="hidden text-center py-20">
+            <div class="w-12 h-12 border-2 border-yellow-400/20 border-t-yellow-400 rounded-full spinner mx-auto mb-4"></div>
+            <p class="text-yellow-400 font-bold tracking-widest uppercase text-xs">Decoding Data</p>
         </div>
 
-        <div id="report" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div class="glass rounded-3xl overflow-hidden shadow-2xl">
-                <div id="severityBar" class="h-3 w-full bg-slate-700">
+        <div id="report" class="hidden fade-in-up">
+            <div class="content-card rounded-xl overflow-hidden">
+                <div id="severityBar" class="h-1 w-full bg-white/5">
                     <div id="severityProgress" class="h-full transition-all duration-1000" style="width: 0%"></div>
                 </div>
-                <div class="p-8">
-                    <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <h2 id="movieTitle" class="text-4xl font-black text-white mb-1"></h2>
-                            <p id="reportCategory" class="text-blue-400 font-bold uppercase text-xs tracking-tighter"></p>
-                        </div>
-                        <div id="severityBadge" class="px-4 py-1 rounded-md text-xs font-black uppercase tracking-tighter border shadow-sm"></div>
+                <div class="p-10 md:p-16">
+                    <div class="flex flex-col md:flex-row justify-between items-baseline mb-12 gap-4">
+                        <h2 id="movieTitle" class="text-6xl font-black text-white uppercase tracking-tighter"></h2>
+                        <div id="severityBadge" class="text-xs font-black uppercase tracking-[0.3em]"></div>
                     </div>
-                    
-                    <div id="detailsList" class="space-y-4"></div>
+                    <div class="space-y-6" id="detailsList"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ... (The JavaScript logic from your previous code remains identical here)
         async function searchMovies() {
-            const query = document.getElementById('query').value;
+            const query = document.getElementById('query').value.trim();
             if(!query) return;
-            
             const resultsDiv = document.getElementById('results');
-            const reportDiv = document.getElementById('report');
-            reportDiv.classList.add('hidden');
-            resultsDiv.innerHTML = '<div class="col-span-full text-center py-10 text-slate-500">Searching film database...</div>';
-            
+            document.getElementById('report').classList.add('hidden');
+            resultsDiv.innerHTML = `<div class="col-span-full text-center py-10 opacity-50 uppercase tracking-widest text-xs">Accessing Database...</div>`;
             try {
                 const res = await fetch('/search', {
                     method: 'POST', 
@@ -95,16 +142,15 @@
                     body: JSON.stringify({query})
                 });
                 const data = await res.json();
-                
-                resultsDiv.innerHTML = data.slice(0,6).map(m => `
+                resultsDiv.innerHTML = data.slice(0, 6).map((m, i) => `
                     <div onclick="analyze('${m.id}', '${m.display.replace(/'/g, "\\'")}')" 
-                         class="glass p-4 rounded-xl cursor-pointer movie-card transition-all flex justify-between items-center group">
-                        <span class="font-bold text-slate-300 group-hover:text-white transition">${m.display}</span>
-                        <span class="text-blue-500 opacity-0 group-hover:opacity-100 transition">ANALYZE →</span>
+                         class="movie-card content-card p-6 cursor-pointer flex justify-between items-center group transition-all">
+                        <h3 class="text-yellow-400 font-bold uppercase tracking-tight">${m.display}</h3>
+                        <span class="text-yellow-400 opacity-0 group-hover:opacity-100 transition-all">→</span>
                     </div>
                 `).join('');
             } catch (e) {
-                resultsDiv.innerHTML = '<div class="text-red-500">Search failed. Check connection.</div>';
+                resultsDiv.innerHTML = `<div class="col-span-full text-red-500 uppercase text-xs text-center">Connection Error</div>`;
             }
         }
 
@@ -113,11 +159,9 @@
             const loading = document.getElementById('loading');
             const report = document.getElementById('report');
             const results = document.getElementById('results');
-
-            results.classList.add('opacity-30', 'pointer-events-none');
+            results.classList.add('opacity-10', 'pointer-events-none');
             loading.classList.remove('hidden');
             report.classList.add('hidden');
-
             try {
                 const res = await fetch('/analyze', {
                     method: 'POST', 
@@ -125,51 +169,32 @@
                     body: JSON.stringify({id, category})
                 });
                 const data = await res.json();
-                
                 loading.classList.add('hidden');
-                results.classList.remove('opacity-30', 'pointer-events-none');
+                results.classList.remove('opacity-10', 'pointer-events-none');
                 report.classList.remove('hidden');
-                
                 document.getElementById('movieTitle').innerText = title;
-                document.getElementById('reportCategory').innerText = category.replace('violence', 'Violence & Gore Analysis').replace('nudity', 'Sex & Nudity Analysis');
-                
                 const sev = data.severity.toLowerCase();
                 const badge = document.getElementById('severityBadge');
                 const progress = document.getElementById('severityProgress');
-                
-                let colorClass = 'bg-emerald-500/20 text-emerald-500 border-emerald-500/50';
-                let barColor = 'bg-emerald-500';
-                let width = '33%';
-
-                if(sev === 'severe') {
-                    colorClass = 'bg-rose-500/20 text-rose-500 border-rose-500/50';
-                    barColor = 'bg-rose-500';
-                    width = '100%';
-                } else if(sev === 'moderate') {
-                    colorClass = 'bg-amber-500/20 text-amber-500 border-amber-500/50';
-                    barColor = 'bg-amber-500';
-                    width = '66%';
-                }
-
-                badge.className = `px-4 py-1 rounded-md text-xs font-black uppercase tracking-widest border shadow-sm ${colorClass}`;
-                badge.innerText = sev;
-                progress.className = `h-full transition-all duration-1000 ${barColor}`;
+                let color = '#10b981'; let width = '25%';
+                if(sev === 'severe') { color = '#ef4444'; width = '100%'; }
+                else if(sev === 'moderate') { color = '#f59e0b'; width = '60%'; }
+                badge.style.color = color;
+                badge.innerText = `LEVEL: ${sev}`;
+                progress.style.backgroundColor = color;
                 setTimeout(() => progress.style.width = width, 100);
-
-                document.getElementById('detailsList').innerHTML = data.details.map(d => `
-                    <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-800 text-slate-400 text-sm leading-relaxed">
+                document.getElementById('detailsList').innerHTML = data.details.map((d) => `
+                    <div class="p-6 border-l-2 border-yellow-500/20 bg-white/5 text-gray-300 text-sm leading-relaxed">
                         ${d}
                     </div>
                 `).join('');
-                
                 window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
-                
             } catch (e) {
                 loading.classList.add('hidden');
-                alert("Analysis failed. Please try again.");
+                alert("Failed to analyze.");
             }
         }
+        document.getElementById('query').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMovies(); });
     </script>
 </body>
 </html>
-
