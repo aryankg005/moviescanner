@@ -14,7 +14,6 @@
             overflow-x: hidden;
         }
         
-        /* Reduced Hero Text with Gold-Black Gradient */
         .hero-font { 
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
@@ -25,22 +24,22 @@
             text-transform: uppercase;
         }
 
-        /* Scanline Overlay Effect */
+        /* Scanline Overlay */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 4px, 3px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
             pointer-events: none;
             z-index: 50;
+            opacity: 0.1;
         }
 
-        /* Floating Geometric Particles */
+        /* Floating Background Elements */
         .particle {
             position: fixed;
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.2);
+            background: rgba(251, 191, 36, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.1);
             z-index: -1;
             animation: float-around var(--duration) infinite linear;
         }
@@ -54,78 +53,89 @@
             background: rgba(15, 15, 15, 0.8);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(251, 191, 36, 0.1);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
 
-        .search-input:focus {
-            border-color: #FBBF24;
-            background: rgba(251, 191, 36, 0.05);
+        /* Pulsing Spoiler Effect */
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .spoiler-pulse {
+            animation: pulse-red 2s infinite;
         }
         
-        .spinner { border-top-color: #FBBF24; animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        .spinner { border-top-color: #FBBF24; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Smooth reveal for reports */
-        .report-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
+        .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="min-h-screen relative">
     <div class="scanlines"></div>
-    <div class="fixed inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none"></div>
     
-    <div class="particle w-12 h-12" style="--duration: 25s; --x1: 10vw; --y1: 10vh; --x2: 80vw; --y2: 70vh;"></div>
-    <div class="particle w-24 h-24 rounded-full" style="--duration: 40s; --x1: 90vw; --y1: 80vh; --x2: 20vw; --y2: 10vh;"></div>
-    <div class="particle w-16 h-16" style="--duration: 30s; --x1: 50vw; --y1: -10vh; --x2: 50vw; --y2: 110vh;"></div>
+    <div class="particle w-24 h-24" style="--duration: 30s; --x1: 5vw; --y1: 10vh; --x2: 80vw; --y2: 80vh;"></div>
+    <div class="particle w-40 h-40 rounded-full" style="--duration: 45s; --x1: 85vw; --y1: 70vh; --x2: 10vw; --y2: 20vh;"></div>
 
     <div class="max-w-5xl mx-auto px-6 py-20 relative z-10">
         
-        <header class="text-center mb-16">
-            <h1 class="hero-font text-5xl md:text-7xl mb-4 tracking-tighter">Real Fighters</h1>
-            <div class="flex items-center justify-center gap-4">
-                <span class="h-[1px] w-12 bg-yellow-500/30"></span>
-                <p class="text-yellow-500/50 text-[10px] font-bold tracking-[0.4em] uppercase">Intelligence Protocol v2.0</p>
-                <span class="h-[1px] w-12 bg-yellow-500/30"></span>
-            </div>
+        <header class="text-center mb-16 fade-in-up">
+            <h1 class="hero-font text-6xl md:text-8xl mb-2 tracking-tighter">Real Fighters</h1>
+            <p class="text-yellow-500/40 text-[10px] font-bold tracking-[0.5em] uppercase">Content Intelligence Protocol</p>
         </header>
 
-        <div class="max-w-2xl mx-auto mb-12">
-            <div class="content-card p-1 rounded-full flex items-center pr-1 transition-all focus-within:ring-1 ring-yellow-500/50">
+        <div class="max-w-2xl mx-auto mb-12 fade-in-up">
+            <div class="content-card p-1 rounded-full flex items-center pr-1 border-yellow-500/20 focus-within:border-yellow-500/50 transition-all">
                 <input id="query" type="text" placeholder="ENTER MOVIE TITLE..." 
                        class="bg-transparent w-full px-8 py-4 text-yellow-400 font-medium placeholder-yellow-400/20 outline-none uppercase text-xs tracking-widest">
                 <button onclick="searchMovies()" class="bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 px-10 rounded-full transition-all text-[10px] tracking-[0.2em]">
-                    EXECUTE
+                    SEARCH
                 </button>
             </div>
         </div>
 
-        <div class="flex justify-center gap-8 mb-16">
-            <label class="cursor-pointer group">
-                <input type="radio" name="category" value="violence" checked class="hidden peer">
-                <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b border-transparent peer-checked:border-yellow-500 pb-2">
-                    Violence
-                </div>
-            </label>
-            <label class="cursor-pointer group">
-                <input type="radio" name="category" value="nudity" class="hidden peer">
-                <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b border-transparent peer-checked:border-yellow-500 pb-2">
-                    Sexual Content
-                </div>
-            </label>
+        <div class="flex flex-col items-center gap-6 mb-16 fade-in-up">
+            <div class="flex gap-8">
+                <label class="cursor-pointer">
+                    <input type="radio" name="category" value="violence" checked class="hidden peer">
+                    <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">
+                        Violence
+                    </div>
+                </label>
+                <label class="cursor-pointer">
+                    <input type="radio" name="category" value="nudity" class="hidden peer">
+                    <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">
+                        Nudity
+                    </div>
+                </label>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <span class="text-[9px] font-black tracking-widest opacity-40 uppercase">Filter Spoilers</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="spoilerToggle" class="sr-only peer" checked>
+                    <div class="w-10 h-5 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-yellow-500 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-yellow-500/20"></div>
+                </label>
+                <span id="spoilerStatus" class="text-[9px] font-black text-yellow-500 tracking-widest">ON</span>
+            </div>
         </div>
 
         <div id="results" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10"></div>
 
         <div id="loading" class="hidden flex flex-col items-center py-20">
             <div class="w-8 h-8 border border-yellow-400/20 border-t-yellow-400 rounded-full spinner mb-4"></div>
-            <p class="text-yellow-400/40 font-bold tracking-[0.5em] text-[8px] uppercase">Retrieving Metadata</p>
+            <p class="text-yellow-400/40 font-bold tracking-[0.5em] text-[8px] uppercase">Retrieving Metadata...</p>
         </div>
 
-        <div id="report" class="hidden max-w-4xl mx-auto">
+        <div id="report" class="hidden max-w-4xl mx-auto fade-in-up">
             <div class="content-card rounded-sm overflow-hidden border-t-4 border-t-yellow-500">
+                <div id="severityBar" class="h-1 w-full bg-white/5">
+                    <div id="severityProgress" class="h-full transition-all duration-1000"></div>
+                </div>
                 <div class="p-8 md:p-12">
                     <div class="flex flex-col md:flex-row justify-between items-start border-b border-white/5 pb-8 mb-8 gap-6">
                         <div>
@@ -141,12 +151,18 @@
     </div>
 
     <script>
+        // Update the Spoiler Status text
+        document.getElementById('spoilerToggle').addEventListener('change', function() {
+            document.getElementById('spoilerStatus').innerText = this.checked ? "ON" : "OFF";
+        });
+
         async function searchMovies() {
             const query = document.getElementById('query').value.trim();
             if(!query) return;
             const resultsDiv = document.getElementById('results');
             document.getElementById('report').classList.add('hidden');
             resultsDiv.innerHTML = `<div class="col-span-full text-center py-10 text-[10px] tracking-[0.5em] opacity-30">SCANNING...</div>`;
+            
             try {
                 const res = await fetch('/search', {
                     method: 'POST', 
@@ -156,7 +172,7 @@
                 const data = await res.json();
                 resultsDiv.innerHTML = data.slice(0, 6).map((m) => `
                     <div onclick="analyze('${m.id}', '${m.display.replace(/'/g, "\\'")}')" 
-                         class="content-card p-4 cursor-pointer group hover:bg-yellow-500 transition-all duration-300">
+                         class="content-card p-4 cursor-pointer group hover:bg-yellow-500 transition-all">
                         <h3 class="text-yellow-400 font-bold text-[10px] uppercase tracking-wider group-hover:text-black transition-colors">${m.display}</h3>
                     </div>
                 `).join('');
@@ -170,9 +186,12 @@
             const loading = document.getElementById('loading');
             const report = document.getElementById('report');
             const results = document.getElementById('results');
-            results.classList.add('hidden');
-            loading.classList.remove('hidden');
+
+            // Bug Fix: Reset state completely on new click
             report.classList.add('hidden');
+            results.classList.add('opacity-10', 'pointer-events-none');
+            loading.classList.remove('hidden');
+
             try {
                 const res = await fetch('/analyze', {
                     method: 'POST', 
@@ -180,33 +199,64 @@
                     body: JSON.stringify({id, category})
                 });
                 const data = await res.json();
+                
                 loading.classList.add('hidden');
+                results.classList.remove('opacity-10', 'pointer-events-none');
                 report.classList.remove('hidden');
+                
                 document.getElementById('movieTitle').innerText = title;
+                
                 const sev = data.severity.toLowerCase();
                 const badge = document.getElementById('severityBadge');
+                const progress = document.getElementById('severityProgress');
                 
                 let color = '#71717a'; 
-                if(sev === 'severe') color = '#ef4444';
-                else if(sev === 'moderate') color = '#f59e0b';
-                else if(sev === 'mild') color = '#3b82f6';
+                let width = '30%';
+                if(sev === 'severe') { color = '#ef4444'; width = '100%'; }
+                else if(sev === 'moderate') { color = '#f59e0b'; width = '60%'; }
+                else if(sev === 'mild') { color = '#3b82f6'; width = '35%'; }
 
                 badge.style.color = color;
                 badge.style.borderColor = color + '44';
-                badge.innerText = `Severity: ${sev}`;
+                badge.innerText = `SEVERITY: ${sev}`;
                 
-                document.getElementById('detailsList').innerHTML = data.details.map((d) => `
-                    <div class="p-5 bg-white/5 border-l border-yellow-500/20 text-gray-400 text-xs leading-relaxed font-light">
-                        ${d}
-                    </div>
-                `).join('');
+                progress.style.backgroundColor = color;
+                progress.style.width = '0%';
+                setTimeout(() => progress.style.width = width, 50);
+
+                const filterSpoilers = document.getElementById('spoilerToggle').checked;
+
+                document.getElementById('detailsList').innerHTML = data.details.map((d) => {
+                    const isSpoiler = d.includes("[SPOILER]");
+                    if (isSpoiler && filterSpoilers) {
+                        return `
+                            <div class="p-5 bg-red-900/10 border-l-2 border-red-500 rounded-sm relative group cursor-pointer spoiler-pulse" 
+                                 onclick="this.querySelector('.txt').classList.remove('blur-md'); this.classList.remove('spoiler-pulse'); this.querySelector('.lbl').remove()">
+                                <span class="lbl absolute top-2 right-2 text-[7px] font-black bg-red-500 text-black px-1.5 py-0.5 uppercase tracking-tighter">SPOILER</span>
+                                <div class="txt text-gray-400 text-xs leading-relaxed blur-md transition-all duration-700">
+                                    ${d.replace("[SPOILER]", "⚠️")}
+                                </div>
+                            </div>`;
+                    }
+                    return `
+                        <div class="p-5 bg-white/5 border-l border-yellow-500/20 text-gray-400 text-xs leading-relaxed font-light">
+                            ${d.replace("[SPOILER]", "⚠️")}
+                        </div>`;
+                }).join('');
+
                 window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
+
             } catch (e) {
                 loading.classList.add('hidden');
-                results.classList.remove('hidden');
-                alert("Buffer Error.");
+                results.classList.remove('opacity-10', 'pointer-events-none');
+                alert("Buffer Error. Try again.");
             }
         }
+
+        // Enter key search
+        document.getElementById('query').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') searchMovies();
+        });
     </script>
 </body>
 </html>
