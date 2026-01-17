@@ -24,6 +24,7 @@
             text-transform: uppercase;
         }
 
+        /* CRT Scanline Effect */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -48,11 +49,12 @@
         }
 
         .content-card { 
-            background: rgba(15, 15, 15, 0.8);
+            background: rgba(15, 15, 15, 0.9);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(251, 191, 36, 0.1);
         }
 
+        /* Pulsing Spoiler Effect */
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
@@ -83,7 +85,7 @@
         </header>
 
         <div class="max-w-2xl mx-auto mb-12 fade-in-up">
-            <div class="content-card p-1 rounded-full flex items-center pr-1 border-yellow-500/20 focus-within:border-yellow-500/50 transition-all">
+            <div class="content-card p-1 rounded-full flex items-center pr-1 border-yellow-500/20 focus-within:border-yellow-500/50 transition-all shadow-2xl">
                 <input id="query" type="text" placeholder="ENTER MOVIE TITLE..." 
                        class="bg-transparent w-full px-8 py-4 text-yellow-400 font-medium placeholder-yellow-400/20 outline-none uppercase text-xs tracking-widest">
                 <button onclick="searchMovies()" class="bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 px-10 rounded-full transition-all text-[10px] tracking-[0.2em]">
@@ -94,11 +96,11 @@
 
         <div class="flex flex-col items-center gap-6 mb-16 fade-in-up">
             <div class="flex gap-8">
-                <label class="cursor-pointer">
+                <label class="cursor-pointer group">
                     <input type="radio" name="category" value="violence" checked class="hidden peer">
                     <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">Violence</div>
                 </label>
-                <label class="cursor-pointer">
+                <label class="cursor-pointer group">
                     <input type="radio" name="category" value="nudity" class="hidden peer">
                     <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">Nudity</div>
                 </label>
@@ -117,20 +119,21 @@
         <div id="results" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10"></div>
 
         <div id="loading" class="hidden flex flex-col items-center py-20">
-            <div class="w-8 h-8 border border-yellow-400/20 border-t-yellow-400 rounded-full spinner mb-4"></div>
+            <div class="w-10 h-10 border-2 border-yellow-400/20 border-t-yellow-400 rounded-full spinner mb-4"></div>
             <p class="text-yellow-400/40 font-bold tracking-[0.5em] text-[8px] uppercase">Retrieving Metadata...</p>
         </div>
 
         <div id="report" class="hidden max-w-4xl mx-auto fade-in-up">
-            <div class="content-card rounded-sm overflow-hidden border-t-4 border-t-yellow-500">
-                <div id="severityBar" class="h-1 w-full bg-white/5">
-                    <div id="severityProgress" class="h-full transition-all duration-1000"></div>
+            <div class="content-card rounded-sm overflow-hidden border-t-4 border-t-yellow-500 shadow-2xl">
+                <div id="severityBar" class="h-1.5 w-full bg-white/5">
+                    <div id="severityProgress" class="h-full transition-all duration-1000" style="width: 0%"></div>
                 </div>
+                
                 <div class="p-8 md:p-12">
-                    <div id="familyVerdict" class="mb-8 p-6 bg-red-600/5 border border-red-500/20 rounded-sm hidden shadow-2xl">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-red-500">✨</span>
-                            <p class="text-[9px] font-black uppercase tracking-[0.4em] text-red-500">Family Suitability Report</p>
+                    <div id="familyVerdict" class="mb-10 p-6 bg-yellow-500/5 border border-yellow-500/10 rounded-sm hidden shadow-xl">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-yellow-500">✨</span>
+                            <p class="text-[9px] font-black uppercase tracking-[0.4em] text-yellow-500">Family Suitability Report</p>
                         </div>
                         <div id="verdictText" class="text-xs text-gray-300 leading-relaxed italic font-light"></div>
                     </div>
@@ -140,15 +143,17 @@
                             <p class="text-yellow-500/50 text-[10px] font-black uppercase tracking-[0.4em] mb-2">Subject Analysis</p>
                             <h2 id="movieTitle" class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter"></h2>
                         </div>
-                        <div id="severityBadge" class="px-6 py-2 border border-white/10 text-[10px] font-black uppercase tracking-widest"></div>
+                        <div id="severityBadge" class="px-6 py-2 border border-white/10 text-[10px] font-black uppercase tracking-widest rounded-sm"></div>
                     </div>
-                    <div class="space-y-3" id="detailsList"></div>
+
+                    <div class="space-y-4" id="detailsList"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Spoiler Toggle Text Update
         document.getElementById('spoilerToggle').addEventListener('change', function() {
             document.getElementById('spoilerStatus').innerText = this.checked ? "ON" : "OFF";
         });
@@ -156,9 +161,11 @@
         async function searchMovies() {
             const query = document.getElementById('query').value.trim();
             if(!query) return;
+
             const resultsDiv = document.getElementById('results');
             document.getElementById('report').classList.add('hidden');
-            resultsDiv.innerHTML = `<div class="col-span-full text-center py-10 text-[10px] tracking-[0.5em] opacity-30">SCANNING...</div>`;
+            resultsDiv.innerHTML = `<div class="col-span-full text-center py-10 text-[10px] tracking-[0.5em] opacity-30">SCANNING SATELLITE...</div>`;
+            
             try {
                 const res = await fetch('/search', {
                     method: 'POST', 
@@ -166,9 +173,10 @@
                     body: JSON.stringify({query})
                 });
                 const data = await res.json();
+                
                 resultsDiv.innerHTML = data.slice(0, 6).map((m) => `
                     <div onclick="analyze('${m.id}', '${m.display.replace(/'/g, "\\'")}')" 
-                         class="content-card p-4 cursor-pointer group hover:bg-yellow-500 transition-all">
+                         class="content-card p-5 cursor-pointer group hover:bg-yellow-500 transition-all duration-300">
                         <h3 class="text-yellow-400 font-bold text-[10px] uppercase tracking-wider group-hover:text-black transition-colors">${m.display}</h3>
                     </div>
                 `).join('');
@@ -184,12 +192,14 @@
             const results = document.getElementById('results');
             const verdictBox = document.getElementById('familyVerdict');
 
+            // Reset States
             report.classList.add('hidden');
             verdictBox.classList.add('hidden');
             results.classList.add('opacity-10', 'pointer-events-none');
             loading.classList.remove('hidden');
 
             try {
+                // 1. Fetch Scraping Data
                 const res = await fetch('/analyze', {
                     method: 'POST', 
                     headers: {'Content-Type': 'application/json'}, 
@@ -202,6 +212,7 @@
                 report.classList.remove('hidden');
                 document.getElementById('movieTitle').innerText = title;
                 
+                // 2. Handle Severity UI
                 const sev = data.severity.toLowerCase();
                 const badge = document.getElementById('severityBadge');
                 const progress = document.getElementById('severityProgress');
@@ -211,40 +222,59 @@
                 else if(sev === 'moderate') { color = '#f59e0b'; width = '60%'; }
                 else if(sev === 'mild') { color = '#3b82f6'; width = '35%'; }
 
-                badge.style.color = color; badge.style.borderColor = color + '44';
+                badge.style.color = color;
+                badge.style.borderColor = color + '44';
                 badge.innerText = `SEVERITY: ${sev}`;
-                progress.style.backgroundColor = color; progress.style.width = '0%';
+                
+                progress.style.backgroundColor = color;
+                progress.style.width = '0%';
                 setTimeout(() => progress.style.width = width, 50);
 
+                // 3. Render Details with Spoiler Logic
                 const filterSpoilers = document.getElementById('spoilerToggle').checked;
                 document.getElementById('detailsList').innerHTML = data.details.map((d) => {
                     const isSpoiler = d.includes("[SPOILER]");
                     if (isSpoiler && filterSpoilers) {
                         return `
-                            <div class="p-5 bg-red-900/10 border-l-2 border-red-500 rounded-sm relative group cursor-pointer spoiler-pulse" 
+                            <div class="p-6 bg-red-900/10 border-l-2 border-red-500 rounded-sm relative group cursor-pointer spoiler-pulse" 
                                  onclick="this.querySelector('.txt').classList.remove('blur-md'); this.classList.remove('spoiler-pulse'); this.querySelector('.lbl').remove()">
-                                <span class="lbl absolute top-2 right-2 text-[7px] font-black bg-red-500 text-black px-1.5 py-0.5 uppercase tracking-tighter">SPOILER</span>
-                                <div class="txt text-gray-400 text-xs leading-relaxed blur-md transition-all duration-700">${d.replace("[SPOILER]", "⚠️")}</div>
+                                <span class="lbl absolute top-2 right-2 text-[7px] font-black bg-red-500 text-black px-1.5 py-0.5 uppercase tracking-tighter">SPOILER (CLICK)</span>
+                                <div class="txt text-gray-400 text-xs leading-relaxed blur-md transition-all duration-700">
+                                    ${d.replace("[SPOILER]", "⚠️")}
+                                </div>
                             </div>`;
                     }
-                    return `<div class="p-5 bg-white/5 border-l border-yellow-500/20 text-gray-400 text-xs font-light">${d.replace("[SPOILER]", "⚠️")}</div>`;
+                    return `
+                        <div class="p-6 bg-white/5 border-l border-yellow-500/20 text-gray-400 text-xs leading-relaxed font-light">
+                            ${d.replace("[SPOILER]", "⚠️")}
+                        </div>`;
                 }).join('');
 
+                // 4. Fetch Gemini Summary
                 const summaryRes = await fetch('/summarize', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ details: data.details, title: title })
                 });
                 const summaryData = await summaryRes.json();
+                
                 verdictBox.classList.remove('hidden');
                 document.getElementById('verdictText').innerText = summaryData.summary;
+                
+                // Smooth Scroll to Result
                 window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
+
             } catch (e) {
                 loading.classList.add('hidden');
                 results.classList.remove('opacity-10', 'pointer-events-none');
-                alert("Buffer Error.");
+                alert("Protocol Error: Unable to analyze data stream.");
             }
         }
+
+        // Search on Enter Key
+        document.getElementById('query').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') searchMovies();
+        });
     </script>
 </body>
 </html>
