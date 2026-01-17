@@ -24,7 +24,6 @@
             text-transform: uppercase;
         }
 
-        /* Scanline Overlay */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -35,7 +34,6 @@
             opacity: 0.1;
         }
 
-        /* Floating Background Elements */
         .particle {
             position: fixed;
             background: rgba(251, 191, 36, 0.05);
@@ -55,15 +53,12 @@
             border: 1px solid rgba(251, 191, 36, 0.1);
         }
 
-        /* Pulsing Spoiler Effect */
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
-        .spoiler-pulse {
-            animation: pulse-red 2s infinite;
-        }
+        .spoiler-pulse { animation: pulse-red 2s infinite; }
         
         .spinner { border-top-color: #FBBF24; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -82,7 +77,6 @@
     <div class="particle w-40 h-40 rounded-full" style="--duration: 45s; --x1: 85vw; --y1: 70vh; --x2: 10vw; --y2: 20vh;"></div>
 
     <div class="max-w-5xl mx-auto px-6 py-20 relative z-10">
-        
         <header class="text-center mb-16 fade-in-up">
             <h1 class="hero-font text-6xl md:text-8xl mb-2 tracking-tighter">Real Fighters</h1>
             <p class="text-yellow-500/40 text-[10px] font-bold tracking-[0.5em] uppercase">Content Intelligence Protocol</p>
@@ -102,15 +96,11 @@
             <div class="flex gap-8">
                 <label class="cursor-pointer">
                     <input type="radio" name="category" value="violence" checked class="hidden peer">
-                    <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">
-                        Violence
-                    </div>
+                    <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">Violence</div>
                 </label>
                 <label class="cursor-pointer">
                     <input type="radio" name="category" value="nudity" class="hidden peer">
-                    <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">
-                        Nudity
-                    </div>
+                    <div class="text-[10px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">Nudity</div>
                 </label>
             </div>
 
@@ -137,6 +127,14 @@
                     <div id="severityProgress" class="h-full transition-all duration-1000"></div>
                 </div>
                 <div class="p-8 md:p-12">
+                    <div id="familyVerdict" class="mb-8 p-6 bg-red-600/5 border border-red-500/20 rounded-sm hidden shadow-2xl">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-red-500">✨</span>
+                            <p class="text-[9px] font-black uppercase tracking-[0.4em] text-red-500">Family Suitability Report</p>
+                        </div>
+                        <div id="verdictText" class="text-xs text-gray-300 leading-relaxed italic font-light"></div>
+                    </div>
+
                     <div class="flex flex-col md:flex-row justify-between items-start border-b border-white/5 pb-8 mb-8 gap-6">
                         <div>
                             <p class="text-yellow-500/50 text-[10px] font-black uppercase tracking-[0.4em] mb-2">Subject Analysis</p>
@@ -151,7 +149,6 @@
     </div>
 
     <script>
-        // Update the Spoiler Status text
         document.getElementById('spoilerToggle').addEventListener('change', function() {
             document.getElementById('spoilerStatus').innerText = this.checked ? "ON" : "OFF";
         });
@@ -162,7 +159,6 @@
             const resultsDiv = document.getElementById('results');
             document.getElementById('report').classList.add('hidden');
             resultsDiv.innerHTML = `<div class="col-span-full text-center py-10 text-[10px] tracking-[0.5em] opacity-30">SCANNING...</div>`;
-            
             try {
                 const res = await fetch('/search', {
                     method: 'POST', 
@@ -186,9 +182,10 @@
             const loading = document.getElementById('loading');
             const report = document.getElementById('report');
             const results = document.getElementById('results');
+            const verdictBox = document.getElementById('familyVerdict');
 
-            // Bug Fix: Reset state completely on new click
             report.classList.add('hidden');
+            verdictBox.classList.add('hidden');
             results.classList.add('opacity-10', 'pointer-events-none');
             loading.classList.remove('hidden');
 
@@ -203,29 +200,23 @@
                 loading.classList.add('hidden');
                 results.classList.remove('opacity-10', 'pointer-events-none');
                 report.classList.remove('hidden');
-                
                 document.getElementById('movieTitle').innerText = title;
                 
                 const sev = data.severity.toLowerCase();
                 const badge = document.getElementById('severityBadge');
                 const progress = document.getElementById('severityProgress');
                 
-                let color = '#71717a'; 
-                let width = '30%';
+                let color = '#71717a'; let width = '30%';
                 if(sev === 'severe') { color = '#ef4444'; width = '100%'; }
                 else if(sev === 'moderate') { color = '#f59e0b'; width = '60%'; }
                 else if(sev === 'mild') { color = '#3b82f6'; width = '35%'; }
 
-                badge.style.color = color;
-                badge.style.borderColor = color + '44';
+                badge.style.color = color; badge.style.borderColor = color + '44';
                 badge.innerText = `SEVERITY: ${sev}`;
-                
-                progress.style.backgroundColor = color;
-                progress.style.width = '0%';
+                progress.style.backgroundColor = color; progress.style.width = '0%';
                 setTimeout(() => progress.style.width = width, 50);
 
                 const filterSpoilers = document.getElementById('spoilerToggle').checked;
-
                 document.getElementById('detailsList').innerHTML = data.details.map((d) => {
                     const isSpoiler = d.includes("[SPOILER]");
                     if (isSpoiler && filterSpoilers) {
@@ -233,30 +224,27 @@
                             <div class="p-5 bg-red-900/10 border-l-2 border-red-500 rounded-sm relative group cursor-pointer spoiler-pulse" 
                                  onclick="this.querySelector('.txt').classList.remove('blur-md'); this.classList.remove('spoiler-pulse'); this.querySelector('.lbl').remove()">
                                 <span class="lbl absolute top-2 right-2 text-[7px] font-black bg-red-500 text-black px-1.5 py-0.5 uppercase tracking-tighter">SPOILER</span>
-                                <div class="txt text-gray-400 text-xs leading-relaxed blur-md transition-all duration-700">
-                                    ${d.replace("[SPOILER]", "⚠️")}
-                                </div>
+                                <div class="txt text-gray-400 text-xs leading-relaxed blur-md transition-all duration-700">${d.replace("[SPOILER]", "⚠️")}</div>
                             </div>`;
                     }
-                    return `
-                        <div class="p-5 bg-white/5 border-l border-yellow-500/20 text-gray-400 text-xs leading-relaxed font-light">
-                            ${d.replace("[SPOILER]", "⚠️")}
-                        </div>`;
+                    return `<div class="p-5 bg-white/5 border-l border-yellow-500/20 text-gray-400 text-xs font-light">${d.replace("[SPOILER]", "⚠️")}</div>`;
                 }).join('');
 
+                const summaryRes = await fetch('/summarize', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ details: data.details, title: title })
+                });
+                const summaryData = await summaryRes.json();
+                verdictBox.classList.remove('hidden');
+                document.getElementById('verdictText').innerText = summaryData.summary;
                 window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
-
             } catch (e) {
                 loading.classList.add('hidden');
                 results.classList.remove('opacity-10', 'pointer-events-none');
-                alert("Buffer Error. Try again.");
+                alert("Buffer Error.");
             }
         }
-
-        // Enter key search
-        document.getElementById('query').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') searchMovies();
-        });
     </script>
 </body>
 </html>
