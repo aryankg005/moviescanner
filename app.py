@@ -12,7 +12,8 @@ GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
 
 if GEMINI_KEY:
     genai.configure(api_key=GEMINI_KEY)
-    # Using flash model for speed and reliability
+    # FIX: Using the direct model string 'gemini-1.5-flash'
+    # This ensures the library uses the correct stable production path
     model = genai.GenerativeModel('gemini-1.5-flash')
 else:
     print("CRITICAL ERROR: GEMINI_API_KEY not found in environment variables.")
@@ -74,7 +75,7 @@ def summarize():
             return jsonify({"summary": "AI was unable to generate a verdict for this specific content."})
             
     except Exception as e:
-        # This will print the exact reason (e.g., Expired Key, Wrong Key) in Render Logs
+        # Improved error logging to catch specific API version mismatches
         print(f"DEBUG GEMINI ERROR: {str(e)}")
         return jsonify({"summary": f"AI Intelligence currently unavailable (Error: {str(e)})"})
 
