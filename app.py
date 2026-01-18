@@ -6,9 +6,16 @@ import os
 
 app = Flask(__name__)
 
-# Configure Gemini - Ensure 'GEMINI_API_KEY' is set in Render Environment Variables
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+# 1. SETUP GEMINI
+# Ensure the key name here matches the Key name in Render Environment Variables exactly
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
+
+if GEMINI_KEY:
+    genai.configure(api_key=GEMINI_KEY)
+    # Using flash model for speed and reliability
+    model = genai.GenerativeModel('gemini-1.5-flash')
+else:
+    print("CRITICAL ERROR: GEMINI_API_KEY not found in environment variables.")
 
 @app.route('/')
 def index():
@@ -16,17 +23,25 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    query = request.json.get('query')
-    results = moviesearcher.search_imdb(query)
-    return jsonify(results)
+    try:
+        query = request.json.get('query')
+        results = moviesearcher.search_imdb(query)
+        return jsonify(results)
+    except Exception as e:
+        print(f"Search Error: {str(e)}")
+        return jsonify([])
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
-    data = request.json
-    movie_id = data.get('id')
-    category = data.get('category')
-    severity, details = parent.get_advisory_details(movie_id, category)
-    return jsonify({"severity": severity, "details": details})
+    try:
+        data = request.json
+        movie_id = data.get('id')
+        category = data.get('category')
+        severity, details = parent.get_advisory_details(movie_id, category)
+        return jsonify({"severity": severity, "details": details})
+    except Exception as e:
+        print(f"Scraper Error: {str(e)}")
+        return jsonify({"severity": "Error", "details": ["Failed to fetch data from IMDb."]})
 
 @app.route('/summarize', methods=['POST'])
 def summarize():
@@ -34,23 +49,36 @@ def summarize():
     details = data.get('details', [])
     movie_title = data.get('title', 'this movie')
     
-    # Culturally aware prompt for Indian households
+    # Prompt specifically tuned for Indian family sensitivities
     prompt = f"""
-    Acting as a content advisor for an Indian household, analyze these incidents for '{movie_title}':
+    Act as a conservative Indian parent content advisor. 
+    Analyze these IMDb parental guide incidents for the movie '{movie_title}':
     {details}
 
-    Focus heavily on Sexual Content and Nudity as these are major deal-breakers for Indian families.
-    Provide a concise 2-3 sentence verdict:
-    1. Is there nudity or "awkward" sexual content for drawing-room viewing?
-    2. Is the violence stylized action or excessively gory?
-    3. Final Verdict: Use "Safe for family viewing" or "Avoid watching with parents/kids".
+    Strictly evaluate if this is safe for a 'Drawing Room' viewing with kids and parents. 
+    Focus mostly on Sex, Nudity, and awkward romantic scenes.
+    Provide a 2-sentence verdict. 
+    Start the response with either 'SAFE FOR FAMILY' or 'AVOID WITH FAMILY'.
     """
     
     try:
+        if not GEMINI_KEY:
+            return jsonify({"summary": "AI Error: API Key is missing in Render settings."})
+            
         response = model.generate_content(prompt)
-        return jsonify({"summary": response.text})
+        
+        # Check if Gemini returned a valid response
+        if response and response.text:
+            return jsonify({"summary": response.text})
+        else:
+            return jsonify({"summary": "AI was unable to generate a verdict for this specific content."})
+            
     except Exception as e:
-        return jsonify({"summary": "AI intelligence unavailable at the moment."})
+        # This will print the exact reason (e.g., Expired Key, Wrong Key) in Render Logs
+        print(f"DEBUG GEMINI ERROR: {str(e)}")
+        return jsonify({"summary": f"AI Intelligence currently unavailable (Error: {str(e)})"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use port 5000 or the port provided by the environment
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
