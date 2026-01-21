@@ -24,7 +24,6 @@
             position: relative;
         }
 
-        /* Animated gradient background */
         body::before {
             content: '';
             position: fixed;
@@ -80,7 +79,6 @@
             100% { transform: translateY(3px); }
         }
 
-        /* Floating orbs */
         .orb {
             position: fixed;
             border-radius: 50%;
@@ -168,20 +166,17 @@
             }
         }
 
-        /* Glowing input */
         .search-input:focus {
             box-shadow: 
                 0 0 0 3px rgba(251, 191, 36, 0.1),
                 0 0 40px rgba(251, 191, 36, 0.15);
         }
 
-        /* Hover glow effect */
         .glow-on-hover:hover {
             box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
             transform: translateY(-2px);
         }
 
-        /* Subtitle typewriter effect */
         .typewriter {
             overflow: hidden;
             white-space: nowrap;
@@ -195,12 +190,10 @@
             to { width: 100%; }
         }
 
-        /* Severity progress glow */
         .severity-glow {
             box-shadow: 0 0 20px currentColor;
         }
 
-        /* Movie card hover effect */
         .movie-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -229,7 +222,6 @@
                 0 0 0 1px rgba(251, 191, 36, 0.3);
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -255,10 +247,10 @@
     <div class="orb orb-2"></div>
 
     <div class="relative z-10 min-h-screen flex items-center justify-center py-20 px-6">
-        <div class="w-full max-w-6xl">
+        <div class="w-full max-w-7xl">
 
-            <header class="text-center mb-24 fade-in-up">
-                <h1 class="hero-font text-7xl md:text-9xl mb-6 drop-shadow-2xl">REAL FIGHTERS</h1>
+            <header class="text-center mb-32 fade-in-up">
+                <h1 class="hero-font text-7xl md:text-9xl mb-8 drop-shadow-2xl">REAL FIGHTERS</h1>
                 <div class="inline-block">
                     <p class="text-yellow-500/60 text-xs font-semibold tracking-[0.5em] uppercase typewriter">
                         CONTENT INTELLIGENCE PROTOCOL
@@ -266,18 +258,18 @@
                 </div>
             </header>
 
-            <div class="max-w-3xl mx-auto mb-20 fade-in-up" style="animation-delay: 0.2s">
+            <div class="max-w-4xl mx-auto mb-24 fade-in-up" style="animation-delay: 0.2s">
                 <div class="content-card p-2 rounded-full flex items-center border-yellow-500/30 transition-all duration-300 search-input">
                     <input id="query" type="text" placeholder="ENTER MOVIE TITLE..." 
-                           class="bg-transparent w-full px-10 py-5 text-yellow-400 font-medium placeholder-yellow-400/30 outline-none uppercase text-sm tracking-[0.3em]">
-                    <button onclick="searchMovies()" class="bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-black font-black py-5 px-14 rounded-full transition-all duration-300 text-xs tracking-[0.25em] whitespace-nowrap shadow-lg hover:shadow-yellow-500/50 hover:scale-105 transform">
+                           class="bg-transparent w-full px-10 py-6 text-yellow-400 font-medium placeholder-yellow-400/30 outline-none uppercase text-sm tracking-[0.3em]">
+                    <button onclick="searchMovies()" class="bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-black font-black py-6 px-16 rounded-full transition-all duration-300 text-xs tracking-[0.25em] whitespace-nowrap shadow-lg hover:shadow-yellow-500/50 hover:scale-105 transform">
                         SEARCH
                     </button>
                 </div>
             </div>
 
-            <div class="flex flex-col items-center gap-12 mb-24 fade-in-up" style="animation-delay: 0.4s">
-                <div class="flex gap-16">
+            <div class="flex flex-col items-center gap-16 mb-32 fade-in-up" style="animation-delay: 0.4s">
+                <div class="flex gap-20">
                     <label class="cursor-pointer group">
                         <input type="radio" name="category" value="violence" checked class="hidden peer">
                         <div class="text-sm font-black tracking-[0.3em] uppercase opacity-40 peer-checked:opacity-100 peer-checked:text-yellow-400 transition-all duration-300 border-b-2 border-transparent peer-checked:border-yellow-400 pb-3 hover:opacity-70 relative">
@@ -303,9 +295,9 @@
                 </div>
             </div>
 
-            <div id="results" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20 fade-in-up" style="animation-delay: 0.6s"></div>
+            <div id="results" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32 fade-in-up" style="animation-delay: 0.6s"></div>
 
-            <div id="loading" class="hidden flex flex-col items-center py-32">
+            <div id="loading" class="hidden flex flex-col items-center py-40">
                 <div class="relative">
                     <div class="w-16 h-16 border-4 border-yellow-400/20 border-t-yellow-400 rounded-full spinner mb-8"></div>
                     <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-yellow-500/40 rounded-full animate-ping"></div>
@@ -319,24 +311,24 @@
                         <div id="severityProgress" class="h-full transition-all duration-1000 severity-glow" style="width: 0%"></div>
                     </div>
                     
-                    <div class="p-12 md:p-16">
-                        <div id="familyVerdict" class="mb-16 p-10 glass-card border-l-4 border-yellow-400 rounded-2xl hidden shadow-2xl">
-                            <div class="flex items-center gap-4 mb-6">
+                    <div class="p-12 md:p-20">
+                        <div id="familyVerdict" class="mb-20 p-12 glass-card border-l-4 border-yellow-400 rounded-2xl hidden shadow-2xl">
+                            <div class="flex items-center gap-4 mb-8">
                                 <span class="text-3xl">✨</span>
                                 <p class="text-sm font-black uppercase tracking-[0.4em] text-yellow-400">FAMILY SUITABILITY INTELLIGENCE</p>
                             </div>
-                            <div id="verdictText" class="text-base text-gray-300 leading-relaxed font-light"></div>
+                            <div id="verdictText" class="text-lg text-gray-300 leading-relaxed font-light"></div>
                         </div>
 
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-yellow-400/20 pb-12 mb-12 gap-10">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-yellow-400/20 pb-16 mb-16 gap-12">
                             <div class="flex-1">
-                                <p class="text-yellow-500/60 text-xs font-black uppercase tracking-[0.5em] mb-4">PROTOCOL SUBJECT</p>
+                                <p class="text-yellow-500/60 text-xs font-black uppercase tracking-[0.5em] mb-6">PROTOCOL SUBJECT</p>
                                 <h2 id="movieTitle" class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-yellow-100 uppercase tracking-tighter leading-none"></h2>
                             </div>
-                            <div id="severityBadge" class="px-10 py-4 glass-card text-sm font-black uppercase tracking-[0.25em] rounded-full whitespace-nowrap shadow-lg"></div>
+                            <div id="severityBadge" class="px-12 py-5 glass-card text-sm font-black uppercase tracking-[0.25em] rounded-full whitespace-nowrap shadow-lg"></div>
                         </div>
 
-                        <div class="space-y-5" id="detailsList"></div>
+                        <div class="space-y-6" id="detailsList"></div>
                     </div>
                 </div>
             </div>
@@ -354,7 +346,7 @@
 
             const resultsDiv = document.getElementById('results');
             document.getElementById('report').classList.add('hidden');
-            resultsDiv.innerHTML = `<div class="col-span-full text-center py-16 text-xs tracking-[0.5em] opacity-40 uppercase animate-pulse">SCANNING SATELLITE DATA...</div>`;
+            resultsDiv.innerHTML = `<div class="col-span-full text-center py-20 text-xs tracking-[0.5em] opacity-40 uppercase animate-pulse">SCANNING SATELLITE DATA...</div>`;
             
             try {
                 const res = await fetch('/search', {
@@ -366,8 +358,8 @@
                 
                 resultsDiv.innerHTML = data.slice(0, 6).map((m) => `
                     <div onclick="analyze('${m.id}', '${m.display.replace(/'/g, "\\'")}')" 
-                         class="content-card movie-card p-8 cursor-pointer group rounded-2xl text-center transition-all duration-300">
-                        <h3 class="text-yellow-400 font-bold text-xs uppercase tracking-[0.3em] group-hover:text-black transition-colors duration-300">${m.display}</h3>
+                         class="content-card movie-card p-10 cursor-pointer group rounded-2xl text-center transition-all duration-300">
+                        <h3 class="text-white font-bold text-sm uppercase tracking-[0.3em] group-hover:text-black transition-colors duration-300">${m.display}</h3>
                     </div>
                 `).join('');
             } catch (e) {
@@ -423,16 +415,16 @@
                     const isSpoiler = d.includes("[SPOILER]");
                     if (isSpoiler && filterSpoilers) {
                         return `
-                            <div class="p-8 glass-card border-l-4 border-red-500 rounded-xl relative group cursor-pointer spoiler-pulse hover:bg-red-900/10 transition-all duration-300" 
+                            <div class="p-10 glass-card border-l-4 border-red-500 rounded-xl relative group cursor-pointer spoiler-pulse hover:bg-red-900/10 transition-all duration-300" 
                                  onclick="this.querySelector('.txt').classList.remove('blur-md'); this.classList.remove('spoiler-pulse'); this.querySelector('.lbl').remove()">
-                                <span class="lbl absolute top-3 right-3 text-[9px] font-black bg-red-500 text-white px-3 py-1.5 uppercase tracking-wider rounded-full shadow-lg">SPOILER - CLICK TO REVEAL</span>
-                                <div class="txt text-gray-400 text-sm leading-relaxed blur-md transition-all duration-700">
+                                <span class="lbl absolute top-4 right-4 text-[9px] font-black bg-red-500 text-white px-3 py-1.5 uppercase tracking-wider rounded-full shadow-lg">SPOILER - CLICK TO REVEAL</span>
+                                <div class="txt text-gray-400 text-base leading-relaxed blur-md transition-all duration-700">
                                     ${d.replace("[SPOILER]", "⚠️")}
                                 </div>
                             </div>`;
                     }
                     return `
-                        <div class="p-8 glass-card border-l-2 border-yellow-500/30 text-gray-400 text-sm leading-relaxed font-light rounded-xl hover:bg-white/5 hover:border-yellow-500/50 transition-all duration-300">
+                        <div class="p-10 glass-card border-l-2 border-yellow-500/30 text-gray-300 text-base leading-relaxed font-light rounded-xl hover:bg-white/5 hover:border-yellow-500/50 transition-all duration-300">
                             ${d.replace("[SPOILER]", "⚠️")}
                         </div>`;
                 }).join('');
