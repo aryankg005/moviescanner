@@ -5,56 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Fighters | Elite Content Intelligence</title>
 
-    <!-- ✅ LOCAL TAILWIND (NOT CDN) -->
     <link rel="stylesheet" href="/static/output.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body { 
-            font-family: 'Inter', sans-serif;
-            background: #050505;
-            color: #FBBF24;
-            overflow-x: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
+        body { 
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(ellipse at top, #0a0a0a 0%, #000000 100%);
+            color: #fbbf24;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(251, 191, 36, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(251, 146, 60, 0.03) 0%, transparent 50%);
+            animation: bgShift 15s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes bgShift {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
+        
         .hero-font { 
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            letter-spacing: -1px;
-            background: linear-gradient(to bottom, #FBBF24 20%, #78350f 100%);
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fbbf24 100%);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-transform: uppercase;
+            animation: shimmer 3s ease-in-out infinite;
+            text-shadow: 0 0 80px rgba(251, 191, 36, 0.3);
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .scanlines {
             position: fixed;
             inset: 0;
-            background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.25) 50%);
-            background-size: 100% 4px;
+            background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.15) 50%);
+            background-size: 100% 3px;
             pointer-events: none;
-            z-index: 50;
-            opacity: 0.1;
+            z-index: 100;
+            opacity: 0.08;
+            animation: scanline 8s linear infinite;
         }
 
-        .particle {
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(3px); }
+        }
+
+        /* Floating orbs */
+        .orb {
             position: fixed;
-            background: rgba(251, 191, 36, 0.05);
-            border: 1px solid rgba(251, 191, 36, 0.1);
-            z-index: -1;
-            animation: float-around var(--duration) infinite linear;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            animation: float var(--duration) ease-in-out infinite;
         }
 
-        @keyframes float-around {
-            from { transform: translate(var(--x1), var(--y1)) rotate(0deg); }
-            to { transform: translate(var(--x2), var(--y2)) rotate(360deg); }
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #fbbf24, transparent);
+            top: 10%;
+            left: 10%;
+            --duration: 20s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #f59e0b, transparent);
+            bottom: 20%;
+            right: 15%;
+            --duration: 25s;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
         .content-card { 
-            background: rgba(15, 15, 15, 0.9);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(251, 191, 36, 0.1);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(251, 191, 36, 0.15);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(251, 191, 36, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(251, 191, 36, 0.15);
         }
 
         .spoiler-pulse {
@@ -62,13 +139,13 @@
         }
 
         @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         .spinner {
-            border-top-color: #FBBF24;
+            border-top-color: #fbbf24;
             animation: spin 0.8s linear infinite;
         }
 
@@ -77,94 +154,190 @@
         }
 
         .fade-in-up {
-            animation: fadeInUp 0.5s ease-out forwards;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        /* Glowing input */
+        .search-input:focus {
+            box-shadow: 
+                0 0 0 3px rgba(251, 191, 36, 0.1),
+                0 0 40px rgba(251, 191, 36, 0.15);
+        }
+
+        /* Hover glow effect */
+        .glow-on-hover:hover {
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Subtitle typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 2s steps(30) 0.5s forwards, blink 0.75s step-end infinite;
+            width: 0;
+            margin: 0 auto;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Severity progress glow */
+        .severity-glow {
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* Movie card hover effect */
+        .movie-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .movie-card:hover::before {
+            left: 100%;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(251, 191, 36, 0.3);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #fbbf24, #f59e0b);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fbbf24;
         }
     </style>
 </head>
 
-<body class="min-h-screen relative flex flex-col items-center">
+<body class="relative">
     <div class="scanlines"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-    <div class="particle w-24 h-24" style="--duration:30s;--x1:5vw;--y1:10vh;--x2:80vw;--y2:80vh;"></div>
-    <div class="particle w-40 h-40 rounded-full" style="--duration:45s;--x1:85vw;--y1:70vh;--x2:10vw;--y2:20vh;"></div>
+    <div class="relative z-10 min-h-screen flex items-center justify-center py-20 px-6">
+        <div class="w-full max-w-6xl">
 
-    <div class="w-full max-w-5xl px-6 py-20 flex flex-col items-center relative z-10">
-
-        <header class="text-center mb-16 fade-in-up w-full">
-            <h1 class="hero-font text-6xl md:text-8xl mb-2 tracking-tighter">Real Fighters</h1>
-            <p class="text-yellow-500/40 text-[10px] font-bold tracking-[0.5em] uppercase">
-                Content Intelligence Protocol
-            </p>
-        </header>
-
-        <div class="w-full max-w-2xl mb-12 fade-in-up">
-            <div class="content-card p-1 rounded-full flex items-center pr-1 border-yellow-500/20 focus-within:border-yellow-500/50 transition-all shadow-2xl bg-black/50">
-                <input id="query" type="text" placeholder="ENTER MOVIE TITLE..." 
-                       class="bg-transparent w-full px-8 py-4 text-yellow-400 font-medium placeholder-yellow-400/20 outline-none uppercase text-xs tracking-widest">
-                <button onclick="searchMovies()" class="bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 px-10 rounded-full transition-all text-[10px] tracking-[0.2em] whitespace-nowrap">
-                    SEARCH
-                </button>
-            </div>
-        </div>
-
-        <div class="w-full flex flex-col items-center gap-8 mb-16 fade-in-up">
-            <div class="flex gap-12">
-                <label class="cursor-pointer group">
-                    <input type="radio" name="category" value="violence" checked class="hidden peer">
-                    <div class="text-[11px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">Violence</div>
-                </label>
-                <label class="cursor-pointer group">
-                    <input type="radio" name="category" value="nudity" class="hidden peer">
-                    <div class="text-[11px] font-black tracking-[0.3em] uppercase opacity-30 peer-checked:opacity-100 peer-checked:text-yellow-500 transition-all border-b-2 border-transparent peer-checked:border-yellow-500 pb-2">Nudity</div>
-                </label>
-            </div>
-
-            <div class="flex items-center gap-5 bg-white/5 px-6 py-3 rounded-full border border-white/10">
-                <span class="text-[10px] font-black tracking-widest opacity-40 uppercase">Filter Spoilers</span>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="spoilerToggle" class="sr-only peer" checked>
-                    <div class="w-10 h-5 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-yellow-500 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-yellow-500/20"></div>
-                </label>
-                <span id="spoilerStatus" class="text-[10px] font-black text-yellow-500 tracking-widest">ON</span>
-            </div>
-        </div>
-
-        <div id="results" class="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mb-10"></div>
-
-        <div id="loading" class="hidden flex flex-col items-center py-20 w-full">
-            <div class="w-10 h-10 border-2 border-yellow-400/20 border-t-yellow-400 rounded-full spinner mb-6"></div>
-            <p class="text-yellow-400/40 font-bold tracking-[0.5em] text-[10px] uppercase animate-pulse">Scanning Metadata...</p>
-        </div>
-
-        <div id="report" class="hidden w-full fade-in-up">
-            <div class="content-card rounded-xl overflow-hidden border border-white/10 shadow-2xl">
-                <div id="severityBar" class="h-2 w-full bg-white/5">
-                    <div id="severityProgress" class="h-full transition-all duration-1000" style="width: 0%"></div>
+            <header class="text-center mb-24 fade-in-up">
+                <h1 class="hero-font text-7xl md:text-9xl mb-6 drop-shadow-2xl">REAL FIGHTERS</h1>
+                <div class="inline-block">
+                    <p class="text-yellow-500/60 text-xs font-semibold tracking-[0.5em] uppercase typewriter">
+                        CONTENT INTELLIGENCE PROTOCOL
+                    </p>
                 </div>
-                
-                <div class="p-8 md:p-12">
-                    <div id="familyVerdict" class="mb-12 p-8 bg-yellow-500/5 border-l-4 border-yellow-500 rounded-r-lg hidden shadow-xl">
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="text-xl">✨</span>
-                            <p class="text-[11px] font-black uppercase tracking-[0.4em] text-yellow-500">Family Suitability Intelligence</p>
-                        </div>
-                        <div id="verdictText" class="text-sm text-gray-300 leading-relaxed italic font-light"></div>
-                    </div>
+            </header>
 
-                    <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-10 mb-10 gap-8">
-                        <div>
-                            <p class="text-yellow-500/50 text-[10px] font-black uppercase tracking-[0.5em] mb-3">Protocol Subject</p>
-                            <h2 id="movieTitle" class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none"></h2>
-                        </div>
-                        <div id="severityBadge" class="px-8 py-3 border border-white/10 text-[11px] font-black uppercase tracking-[0.2em] rounded-full bg-black/40"></div>
-                    </div>
+            <div class="max-w-3xl mx-auto mb-20 fade-in-up" style="animation-delay: 0.2s">
+                <div class="content-card p-2 rounded-full flex items-center border-yellow-500/30 transition-all duration-300 search-input">
+                    <input id="query" type="text" placeholder="ENTER MOVIE TITLE..." 
+                           class="bg-transparent w-full px-10 py-5 text-yellow-400 font-medium placeholder-yellow-400/30 outline-none uppercase text-sm tracking-[0.3em]">
+                    <button onclick="searchMovies()" class="bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-black font-black py-5 px-14 rounded-full transition-all duration-300 text-xs tracking-[0.25em] whitespace-nowrap shadow-lg hover:shadow-yellow-500/50 hover:scale-105 transform">
+                        SEARCH
+                    </button>
+                </div>
+            </div>
 
-                    <div class="space-y-6 w-full" id="detailsList"></div>
+            <div class="flex flex-col items-center gap-12 mb-24 fade-in-up" style="animation-delay: 0.4s">
+                <div class="flex gap-16">
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="category" value="violence" checked class="hidden peer">
+                        <div class="text-sm font-black tracking-[0.3em] uppercase opacity-40 peer-checked:opacity-100 peer-checked:text-yellow-400 transition-all duration-300 border-b-2 border-transparent peer-checked:border-yellow-400 pb-3 hover:opacity-70 relative">
+                            <span class="relative z-10">VIOLENCE</span>
+                            <span class="absolute inset-0 bg-yellow-400/10 blur-xl opacity-0 peer-checked:opacity-100 transition-opacity duration-300"></span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="category" value="nudity" class="hidden peer">
+                        <div class="text-sm font-black tracking-[0.3em] uppercase opacity-40 peer-checked:opacity-100 peer-checked:text-yellow-400 transition-all duration-300 border-b-2 border-transparent peer-checked:border-yellow-400 pb-3 hover:opacity-70">
+                            NUDITY
+                        </div>
+                    </label>
+                </div>
+
+                <div class="flex items-center gap-6 glass-card px-10 py-5 rounded-full hover:border-yellow-400/40 transition-all duration-300">
+                    <span class="text-xs font-bold tracking-[0.3em] opacity-50 uppercase">Filter Spoilers</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="spoilerToggle" class="sr-only peer" checked>
+                        <div class="w-14 h-7 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-gradient-to-r after:from-yellow-500 after:to-yellow-400 after:rounded-full after:h-6 after:w-6 after:transition-all after:shadow-lg peer-checked:bg-yellow-500/20"></div>
+                    </label>
+                    <span id="spoilerStatus" class="text-xs font-black text-yellow-400 tracking-[0.3em]">ON</span>
+                </div>
+            </div>
+
+            <div id="results" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20 fade-in-up" style="animation-delay: 0.6s"></div>
+
+            <div id="loading" class="hidden flex flex-col items-center py-32">
+                <div class="relative">
+                    <div class="w-16 h-16 border-4 border-yellow-400/20 border-t-yellow-400 rounded-full spinner mb-8"></div>
+                    <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-yellow-500/40 rounded-full animate-ping"></div>
+                </div>
+                <p class="text-yellow-400/50 font-bold tracking-[0.5em] text-xs uppercase animate-pulse mt-4">SCANNING METADATA...</p>
+            </div>
+
+            <div id="report" class="hidden fade-in-up">
+                <div class="glass-card rounded-3xl overflow-hidden border-yellow-400/20 shadow-2xl">
+                    <div id="severityBar" class="h-3 w-full bg-black/50">
+                        <div id="severityProgress" class="h-full transition-all duration-1000 severity-glow" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="p-12 md:p-16">
+                        <div id="familyVerdict" class="mb-16 p-10 glass-card border-l-4 border-yellow-400 rounded-2xl hidden shadow-2xl">
+                            <div class="flex items-center gap-4 mb-6">
+                                <span class="text-3xl">✨</span>
+                                <p class="text-sm font-black uppercase tracking-[0.4em] text-yellow-400">FAMILY SUITABILITY INTELLIGENCE</p>
+                            </div>
+                            <div id="verdictText" class="text-base text-gray-300 leading-relaxed font-light"></div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-yellow-400/20 pb-12 mb-12 gap-10">
+                            <div class="flex-1">
+                                <p class="text-yellow-500/60 text-xs font-black uppercase tracking-[0.5em] mb-4">PROTOCOL SUBJECT</p>
+                                <h2 id="movieTitle" class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-yellow-100 uppercase tracking-tighter leading-none"></h2>
+                            </div>
+                            <div id="severityBadge" class="px-10 py-4 glass-card text-sm font-black uppercase tracking-[0.25em] rounded-full whitespace-nowrap shadow-lg"></div>
+                        </div>
+
+                        <div class="space-y-5" id="detailsList"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -181,7 +354,7 @@
 
             const resultsDiv = document.getElementById('results');
             document.getElementById('report').classList.add('hidden');
-            resultsDiv.innerHTML = `<div class="col-span-full text-center py-10 text-[10px] tracking-[0.5em] opacity-30 uppercase">Scanning Satellite Data...</div>`;
+            resultsDiv.innerHTML = `<div class="col-span-full text-center py-16 text-xs tracking-[0.5em] opacity-40 uppercase animate-pulse">SCANNING SATELLITE DATA...</div>`;
             
             try {
                 const res = await fetch('/search', {
@@ -193,12 +366,12 @@
                 
                 resultsDiv.innerHTML = data.slice(0, 6).map((m) => `
                     <div onclick="analyze('${m.id}', '${m.display.replace(/'/g, "\\'")}')" 
-                         class="content-card p-6 cursor-pointer group hover:bg-yellow-500 transition-all duration-300 text-center">
-                        <h3 class="text-yellow-400 font-bold text-[10px] uppercase tracking-wider group-hover:text-black transition-colors">${m.display}</h3>
+                         class="content-card movie-card p-8 cursor-pointer group rounded-2xl text-center transition-all duration-300">
+                        <h3 class="text-yellow-400 font-bold text-xs uppercase tracking-[0.3em] group-hover:text-black transition-colors duration-300">${m.display}</h3>
                     </div>
                 `).join('');
             } catch (e) {
-                resultsDiv.innerHTML = `<div class="col-span-full text-red-500 text-[10px] text-center uppercase">Signal Interrupted</div>`;
+                resultsDiv.innerHTML = `<div class="col-span-full text-red-500 text-xs text-center uppercase tracking-wide">SIGNAL INTERRUPTED</div>`;
             }
         }
 
@@ -211,7 +384,7 @@
 
             report.classList.add('hidden');
             verdictBox.classList.add('hidden');
-            results.classList.add('opacity-10', 'pointer-events-none');
+            results.classList.add('opacity-20', 'pointer-events-none', 'blur-sm');
             loading.classList.remove('hidden');
 
             try {
@@ -223,7 +396,7 @@
                 const data = await res.json();
                 
                 loading.classList.add('hidden');
-                results.classList.remove('opacity-10', 'pointer-events-none');
+                results.classList.remove('opacity-20', 'pointer-events-none', 'blur-sm');
                 report.classList.remove('hidden');
                 document.getElementById('movieTitle').innerText = title;
                 
@@ -237,28 +410,29 @@
                 else if(sev === 'mild') { color = '#3b82f6'; width = '35%'; }
 
                 badge.style.color = color;
-                badge.style.borderColor = color + '44';
+                badge.style.borderColor = color + '66';
+                badge.style.background = color + '10';
                 badge.innerText = `SEVERITY: ${sev}`;
                 
                 progress.style.backgroundColor = color;
                 progress.style.width = '0%';
-                setTimeout(() => progress.style.width = width, 50);
+                setTimeout(() => progress.style.width = width, 100);
 
                 const filterSpoilers = document.getElementById('spoilerToggle').checked;
                 document.getElementById('detailsList').innerHTML = data.details.map((d) => {
                     const isSpoiler = d.includes("[SPOILER]");
                     if (isSpoiler && filterSpoilers) {
                         return `
-                            <div class="p-6 bg-red-900/10 border-l-2 border-red-500 rounded-sm relative group cursor-pointer spoiler-pulse" 
+                            <div class="p-8 glass-card border-l-4 border-red-500 rounded-xl relative group cursor-pointer spoiler-pulse hover:bg-red-900/10 transition-all duration-300" 
                                  onclick="this.querySelector('.txt').classList.remove('blur-md'); this.classList.remove('spoiler-pulse'); this.querySelector('.lbl').remove()">
-                                <span class="lbl absolute top-2 right-2 text-[7px] font-black bg-red-500 text-black px-1.5 py-0.5 uppercase tracking-tighter">SPOILER (CLICK)</span>
-                                <div class="txt text-gray-400 text-xs leading-relaxed blur-md transition-all duration-700">
+                                <span class="lbl absolute top-3 right-3 text-[9px] font-black bg-red-500 text-white px-3 py-1.5 uppercase tracking-wider rounded-full shadow-lg">SPOILER - CLICK TO REVEAL</span>
+                                <div class="txt text-gray-400 text-sm leading-relaxed blur-md transition-all duration-700">
                                     ${d.replace("[SPOILER]", "⚠️")}
                                 </div>
                             </div>`;
                     }
                     return `
-                        <div class="p-6 bg-white/5 border-l border-yellow-500/20 text-gray-400 text-xs leading-relaxed font-light">
+                        <div class="p-8 glass-card border-l-2 border-yellow-500/30 text-gray-400 text-sm leading-relaxed font-light rounded-xl hover:bg-white/5 hover:border-yellow-500/50 transition-all duration-300">
                             ${d.replace("[SPOILER]", "⚠️")}
                         </div>`;
                 }).join('');
@@ -272,12 +446,14 @@
                 verdictBox.classList.remove('hidden');
                 document.getElementById('verdictText').innerText = summaryData.summary;
                 
-                window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
+                setTimeout(() => {
+                    window.scrollTo({ top: report.offsetTop - 100, behavior: 'smooth' });
+                }, 100);
 
             } catch (e) {
                 loading.classList.add('hidden');
-                results.classList.remove('opacity-10', 'pointer-events-none');
-                alert("Protocol Failure.");
+                results.classList.remove('opacity-20', 'pointer-events-none', 'blur-sm');
+                alert("PROTOCOL FAILURE - CONNECTION LOST");
             }
         }
 
